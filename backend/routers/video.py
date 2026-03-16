@@ -92,7 +92,6 @@ def draw_slide(section, W, H):
 
 def generate_video_sync(req, output_path):
     try:
-        # Point MoviePy to bundled FFmpeg — no PATH setup needed on Windows
         try:
             import imageio_ffmpeg
             import moviepy.config as mpconf
