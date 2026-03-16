@@ -15,3 +15,12 @@
 .ct-date { font-size:10px; color:var(--t3); font-family:var(--mono); margin-bottom:8px; letter-spacing:0.06em; text-transform:uppercase; }
 .ct-row { display:flex; justify-content:space-between; gap:16px; font-size:12px; margin:3px 0; color:var(--t2); }
 .ct-row span:last-child { font-family:var(--mono); font-weight:600; color:var(--t1); }
+.chart-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 280px;
+  text-align: center;
+  padding: 24px;
+}
