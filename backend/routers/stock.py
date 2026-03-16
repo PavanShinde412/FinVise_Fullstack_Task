@@ -32,43 +32,44 @@ def resolve_ticker(symbol: str) -> str:
     return symbol
 
 
-async def fetch_chart_from_stooq(symbol: str, client: httpx.AsyncClient) -> list:
-    """Fetch 30-day historical chart data from Stooq."""
+async def fetch_chart_from_nse(symbol: str, client: httpx.AsyncClient) -> list:
+    """Fetch 30-day historical OHLC from NSE India chart API."""
     try:
         from datetime import timedelta
         end = datetime.now()
         start = end - timedelta(days=45)
-        stooq_symbol = f"{symbol}.IN"
         url = (
-            f"https://stooq.com/q/d/l/?s={stooq_symbol}"
-            f"&d1={start.strftime('%Y%m%d')}&d2={end.strftime('%Y%m%d')}&i=d"
+            f"https://www.nseindia.com/api/historical/cm/equity"
+            f"?symbol={symbol}&series=[%22EQ%22]"
+            f"&from={start.strftime('%d-%m-%Y')}&to={end.strftime('%d-%m-%Y')}&csv=false"
         )
         resp = await client.get(url, timeout=10)
         if resp.status_code != 200:
             return []
-        lines = resp.text.strip().split("\n")
-        if len(lines) < 2:
+        data = resp.json()
+        rows = data.get("data", [])
+        if not rows:
             return []
         chart_data = []
-        for line in lines[1:]:  # skip header
-            parts = line.strip().split(",")
-            if len(parts) < 5:
-                continue
+        for row in rows:
             try:
                 chart_data.append({
-                    "date": parts[0],
-                    "open": round(float(parts[1]), 2),
-                    "high": round(float(parts[2]), 2),
-                    "low": round(float(parts[3]), 2),
-                    "close": round(float(parts[4]), 2),
-                    "volume": int(float(parts[5])) if len(parts) > 5 else 0,
+                    "date": row.get("CH_TIMESTAMP", "")[:10],
+                    "open": round(float(row.get("CH_OPENING_PRICE") or 0), 2),
+                    "high": round(float(row.get("CH_TRADE_HIGH_PRICE") or 0), 2),
+                    "low": round(float(row.get("CH_TRADE_LOW_PRICE") or 0), 2),
+                    "close": round(float(row.get("CH_CLOSING_PRICE") or 0), 2),
+                    "volume": int(row.get("CH_TOT_TRADED_QTY") or 0),
                 })
-            except (ValueError, IndexError):
+            except (ValueError, TypeError):
                 continue
+        chart_data.reverse()
         return chart_data[-30:]
     except Exception as e:
-        logger.warning(f"Stooq chart fetch failed for {symbol}: {e}")
+        logger.warning(f"NSE chart fetch failed for {symbol}: {e}")
         return []
+
+
 
 
 async def fetch_from_nse(symbol: str) -> Optional[dict]:
@@ -94,7 +95,7 @@ async def fetch_from_nse(symbol: str) -> Optional[dict]:
             pct_change = round((price_change / float(prev_close) * 100) if prev_close else 0, 2)
 
             # Fetch chart data from Stooq in the same session
-            chart_data = await fetch_chart_from_stooq(symbol, client)
+            chart_data = await fetch_chart_from_nse(symbol, client)
 
             return {
                 "symbol": symbol,
