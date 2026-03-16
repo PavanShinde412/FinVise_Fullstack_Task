@@ -33,42 +33,36 @@ def resolve_ticker(symbol: str) -> str:
 
 
 async def fetch_chart_from_nse(symbol: str, client: httpx.AsyncClient) -> list:
-    """Fetch 30-day historical OHLC from NSE India chart API."""
+    """Fetch 30-day chart using yfinance .history() — works on cloud even when .info fails."""
     try:
-        from datetime import timedelta
-        end = datetime.now()
-        start = end - timedelta(days=45)
-        url = (
-            f"https://www.nseindia.com/api/historical/cm/equity"
-            f"?symbol={symbol}&series=[%22EQ%22]"
-            f"&from={start.strftime('%d-%m-%Y')}&to={end.strftime('%d-%m-%Y')}&csv=false"
-        )
-        resp = await client.get(url, timeout=10)
-        if resp.status_code != 200:
-            return []
-        data = resp.json()
-        rows = data.get("data", [])
-        if not rows:
+        import yfinance as yf
+        import requests as req_lib
+        session = req_lib.Session()
+        session.headers.update({
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
+            "Referer": "https://finance.yahoo.com/",
+        })
+        ticker = yf.Ticker(f"{symbol}.NS", session=session)
+        hist = ticker.history(period="1mo", interval="1d")
+        if hist.empty:
+            ticker = yf.Ticker(f"{symbol}.BO", session=session)
+            hist = ticker.history(period="1mo", interval="1d")
+        if hist.empty:
             return []
         chart_data = []
-        for row in rows:
-            try:
-                chart_data.append({
-                    "date": row.get("CH_TIMESTAMP", "")[:10],
-                    "open": round(float(row.get("CH_OPENING_PRICE") or 0), 2),
-                    "high": round(float(row.get("CH_TRADE_HIGH_PRICE") or 0), 2),
-                    "low": round(float(row.get("CH_TRADE_LOW_PRICE") or 0), 2),
-                    "close": round(float(row.get("CH_CLOSING_PRICE") or 0), 2),
-                    "volume": int(row.get("CH_TOT_TRADED_QTY") or 0),
-                })
-            except (ValueError, TypeError):
-                continue
-        chart_data.reverse()
+        for date, row in hist.iterrows():
+            chart_data.append({
+                "date": date.strftime("%Y-%m-%d"),
+                "open": round(float(row["Open"]), 2),
+                "high": round(float(row["High"]), 2),
+                "low": round(float(row["Low"]), 2),
+                "close": round(float(row["Close"]), 2),
+                "volume": int(row["Volume"]),
+            })
         return chart_data[-30:]
     except Exception as e:
-        logger.warning(f"NSE chart fetch failed for {symbol}: {e}")
+        logger.warning(f"Chart fetch failed for {symbol}: {e}")
         return []
-
 
 
 
