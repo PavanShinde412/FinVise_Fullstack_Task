@@ -33,7 +33,19 @@ export default function PriceChart({ data, loading, symbol }) {
       <div className="skeleton" style={{height:280}}/>
     </div>
   );
-  if (!chart.length) return null;
+  if (!chart.length) return (
+    <div className="price-chart card">
+      <div className="chart-top">
+        <div className="chart-title-block">
+          <div className="chart-title">30-Day Price History</div>
+          <div className="chart-meta">{symbol} · NSE · Daily close</div>
+        </div>
+      </div>
+      <div className="chart-placeholder">
+        <div style={{color:'var(--text-muted)',fontSize:13}}>Chart data loading…</div>
+      </div>
+    </div>
+  );
 
   const mtd = ((chart[chart.length-1]?.close-chart[0]?.close)/chart[0]?.close*100).toFixed(2);
 
