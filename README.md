@@ -10,14 +10,11 @@
 
 ## 🚀 Live URLs
 
-| Service | URL |
-|---|---|
-| **Frontend (React)** | `https://YOUR_FRONTEND_URL.vercel.app` |
-| **Backend API (FastAPI)** | `https://YOUR_BACKEND_URL.onrender.com` |
-| **API Docs (Swagger)** | `https://YOUR_BACKEND_URL.onrender.com/docs` |
-| **Sample Video** | [Watch Demo](https://YOUR_DEMO_VIDEO_LINK) |
-
----
+| Service                   | URL                                                |
+| ------------------------- | -------------------------------------------------- |
+| **Frontend (React)**      | `https://fin-vise-fullstack-task.vercel.app`       |
+| **Backend API (FastAPI)** | `https://finvise-fullstack-task.onrender.com`      |
+| **API Docs (Swagger)**    | `https://finvise-fullstack-task.onrender.com/docs` |
 
 ## 📋 What I Built
 
@@ -35,86 +32,83 @@ FinVise AI is a full-stack, production-grade stock market intelligence platform 
 
 ## 🎬 Video Brief Format
 
-| Section | Timestamp | Content |
-|---|---|---|
-| 🎣 Hook | 0–10s | Attention-grabbing opening tied to today's price/news |
-| 📊 Stock Snapshot | 10–30s | Price, % change, 52-week context in plain English |
-| 📰 What's Happening | 30–60s | 2–3 key news events explained simply |
-| 💡 Beginner Takeaway | 60–80s | What it means for a first-time investor |
-| 📣 Call to Action | 80–90s | Neutral educational closing line |
+| Section              | Timestamp | Content                                               |
+| -------------------- | --------- | ----------------------------------------------------- |
+| 🎣 Hook              | 0–10s     | Attention-grabbing opening tied to today's price/news |
+| 📊 Stock Snapshot    | 10–30s    | Price, % change, 52-week context in plain English     |
+| 📰 What's Happening  | 30–60s    | 2–3 key news events explained simply                  |
+| 💡 Beginner Takeaway | 60–80s    | What it means for a first-time investor               |
+| 📣 Call to Action    | 80–90s    | Neutral educational closing line                      |
 
 ---
 
 ## 🛠 Tech Stack
 
 ### Backend (Python)
-| Layer | Choice | Why |
-|---|---|---|
-| Framework | **FastAPI** | Async, fast, auto-generates Swagger docs |
-| Stock Data | **yfinance** | Free, reliable, supports NSE `.NS` suffix |
-| News | **feedparser** + RSS feeds | Fully free, no API key needed for base functionality |
-| LLM (primary) | **Groq (llama-3.3-70b)** | Fastest free-tier inference, JSON mode support |
-| LLM (fallback) | **Gemini 1.5 Flash** | High quality, generous free tier |
-| LLM (tertiary) | **Anthropic Claude Haiku** | Reliable fallback |
-| TTS | **gTTS** | Completely free, no API key, good quality |
-| Video Assembly | **MoviePy** | Python-native, no paid services needed |
-| Deployment | **Render** | Free tier web service, supports Python |
+
+| Layer          | Choice                     | Why                                                  |
+| -------------- | -------------------------- | ---------------------------------------------------- |
+| Framework      | **FastAPI**                | Async, fast, auto-generates Swagger docs             |
+| Stock Data     | **yfinance**               | Free, reliable, supports NSE `.NS` suffix            |
+| News           | **feedparser** + RSS feeds | Fully free, no API key needed for base functionality |
+| LLM (primary)  | **Groq (llama-3.3-70b)**   | Fastest free-tier inference, JSON mode support       |
+| LLM (fallback) | **Gemini 1.5 Flash**       | High quality, generous free tier                     |
+| LLM (tertiary) | **Anthropic Claude Haiku** | Reliable fallback                                    |
+| TTS            | **gTTS**                   | Completely free, no API key, good quality            |
+| Video Assembly | **MoviePy**                | Python-native, no paid services needed               |
+| Deployment     | **Render**                 | Free tier web service, supports Python               |
 
 ### Frontend (React)
-| Layer | Choice | Why |
-|---|---|---|
-| Framework | **React 18** | Familiar, component-based, great ecosystem |
-| Charts | **Recharts** | Lightweight, composable, works with financial data |
-| HTTP | **fetch (native)** | No extra dependencies needed |
-| Fonts | **Sora + Space Mono** | Modern display + monospace for financial data |
-| Deployment | **Vercel** | Instant deploys, CDN, free tier |
+
+| Layer      | Choice                | Why                                                |
+| ---------- | --------------------- | -------------------------------------------------- |
+| Framework  | **React 18**          | Familiar, component-based, great ecosystem         |
+| Charts     | **Recharts**          | Lightweight, composable, works with financial data |
+| HTTP       | **fetch (native)**    | No extra dependencies needed                       |
+| Fonts      | **Sora + Space Mono** | Modern display + monospace for financial data      |
+| Deployment | **Vercel**            | Instant deploys, CDN, free tier                    |
 
 ---
 
 ## ⚙️ Local Setup
 
 ### Prerequisites
+
 - Python 3.10+
 - Node.js 18+
 - At least one LLM API key (Groq recommended — fastest + free)
 
 ### 1. Clone the repo
+
 ```bash
-git clone https://github.com/yourusername/finvise-ai.git
+git clone https://github.com/PavanShinde412/finvise-ai.git
 cd finvise-ai
 ```
 
 ### 2. Backend setup
+
 ```bash
 cd backend
 
-# Create virtual environment
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+venv/bin/activate
 
-# Install dependencies
 pip install -r requirements.txt
 
-# Copy and fill environment variables
 cp .env.example .env
-# Edit .env and add your API keys
 
-# Run the backend
 uvicorn main:app --reload --port 8000
 ```
 
 ### 3. Frontend setup
+
 ```bash
 cd frontend
 
-# Install dependencies
 npm install
 
-# Copy and configure environment
 cp .env.example .env.local
-# Edit .env.local: set REACT_APP_API_URL=http://localhost:8000
 
-# Start the dev server
 npm start
 ```
 
@@ -125,6 +119,7 @@ Visit `http://localhost:3000` in your browser.
 ## 🌍 Deployment Guide
 
 ### Backend → Render (Free Tier)
+
 1. Push your code to GitHub
 2. Go to [render.com](https://render.com) → New Web Service
 3. Connect your GitHub repo → select `backend/` as root directory
@@ -134,22 +129,17 @@ Visit `http://localhost:3000` in your browser.
 7. Deploy — you'll get a URL like `https://finvise-ai-backend.onrender.com`
 
 ### Frontend → Vercel (Free Tier)
+
 1. Go to [vercel.com](https://vercel.com) → New Project
 2. Import your GitHub repo → select `frontend/` as root directory
-3. Set environment variable: `REACT_APP_API_URL=https://YOUR_RENDER_URL.onrender.com`
-4. Deploy — you'll get a URL like `https://finvise-ai.vercel.app`
-
----
+3. Set environment variable: `REACT_APP_API_URL=https://finvise-fullstack-task.onrender.com`
+4. Deploy — you'll get a URL like `https://fin-vise-fullstack-task.vercel.app`
 
 ## 🔑 API Keys Needed
 
-| Key | Where to Get | Required? |
-|---|---|---|
+| Key            | Where to Get                                 | Required?      |
+| -------------- | -------------------------------------------- | -------------- |
 | `GROQ_API_KEY` | [console.groq.com](https://console.groq.com) | ✅ Recommended |
-| `GEMINI_API_KEY` | [aistudio.google.com](https://aistudio.google.com) | Optional (fallback) |
-| `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) | Optional (tertiary) |
-| `NEWSAPI_KEY` | [newsapi.org](https://newsapi.org) | Optional (RSS works without it) |
-| `GNEWS_KEY` | [gnews.io](https://gnews.io) | Optional |
 
 **You can run the app with ONLY a Groq API key.** RSS news feeds work without any key.
 
@@ -157,21 +147,22 @@ Visit `http://localhost:3000` in your browser.
 
 ## 📡 API Endpoints
 
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/stock/{symbol}` | Full stock data (OHLCV, chart, metadata) |
-| `GET` | `/api/stock/{symbol}/summary` | Compact summary for LLM input |
-| `GET` | `/api/news/{symbol}` | Multi-source news articles |
-| `POST` | `/api/brief/generate` | Generate AI video script |
-| `POST` | `/api/video/generate` | Start async video generation |
-| `GET` | `/api/video/status/{job_id}` | Poll video generation status |
-| `GET` | `/api/video/download/{job_id}` | Download generated MP4 |
+| Method | Endpoint                       | Description                              |
+| ------ | ------------------------------ | ---------------------------------------- |
+| `GET`  | `/api/stock/{symbol}`          | Full stock data (OHLCV, chart, metadata) |
+| `GET`  | `/api/stock/{symbol}/summary`  | Compact summary for LLM input            |
+| `GET`  | `/api/news/{symbol}`           | Multi-source news articles               |
+| `POST` | `/api/brief/generate`          | Generate AI video script                 |
+| `POST` | `/api/video/generate`          | Start async video generation             |
+| `GET`  | `/api/video/status/{job_id}`   | Poll video generation status             |
+| `GET`  | `/api/video/download/{job_id}` | Download generated MP4                   |
 
 ---
 
 ## 🧠 LLM Prompt Engineering
 
 The brief generation prompt is carefully structured to:
+
 - **Contextualise** the stock data (52-week position as %, not just numbers)
 - **Mandate** 5 timed sections with specific word/sentence counts
 - **Enforce** beginner-friendly language (no jargon instruction)
@@ -197,7 +188,3 @@ The system prompt frames the model as "FinVise AI — a friendly financial educa
 ## ⚠️ Disclaimer
 
 This platform is for **educational purposes only**. Nothing on FinVise AI constitutes financial advice. Always consult a SEBI-registered investment advisor before making investment decisions.
-
----
-
-*Built with ❤️ for the FinVise AI Technical Assignment*
